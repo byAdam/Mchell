@@ -1,0 +1,204 @@
+import uuid, random, os,json
+from math import sqrt
+from function import Function
+
+class World:
+	def __init__(self):
+		self.blocks = {}
+		self.entities = {}
+		self.scoreboards = {}
+		self.functions = {}
+		self.directory = ""
+
+	def save_world(self):
+		world = {"blocks":self.blocks,"entities":self.entities,"scoreboards":self.scoreboards}
+		with open(os.path.join(self.directory,"world.json"),"w+") as f:
+			json.dump(world,f)
+
+	def load_world(self,directory,do_save):
+		self.directory = directory
+		if do_save:
+			if os.path.isfile(os.path.join(directory,"world.json")):
+				with open(os.path.join(directory,"world.json")) as f:
+					try:
+						world = json.load(f)
+						self.blocks = world["blocks"]
+						self.entities = world["entities"]
+						self.scoreboards = world["scoreboards"]
+					except:
+						pass
+		self.load_all_functions(directory)
+
+	def load_all_functions(self,folder):
+		for name in os.listdir(folder):
+			if folder != None:
+				path = folder + "/" + name
+			else:
+				path = name
+			if os.path.isfile(path):
+				self.load_function(path)
+			else:
+				self.load_all_functions(path)
+
+	def load_function(self,relpath):
+		with open(relpath) as f:
+			if relpath[-11:] == ".mcfunction":
+				self.functions[os.path.relpath(relpath[:-11],self.directory)] = Function(relpath[:-11],f.readlines())
+
+
+	def place_block(self,coordinates,block,data=False):
+		if not data:
+			data = 0
+		self.blocks[coordinates] = {"block":block,"data":data}
+
+	def get_block(self,coordinates):
+		if coordinates in self.blocks:
+			return self.blocks[coordinates]
+		else:
+			return {"block":"air","data":0}
+
+	def place_entity(self,coordinates,entity,name=False,u=False):
+		if not name:
+			name = entity
+		if not u:
+			u = str(uuid.uuid4())
+		self.entities[u] = {"coordinates":coordinates,"entity":entity,"uuid":u,"name":name,"tags":[]}
+
+	def remove_entity(self,u):
+		if u in self.entities:
+			del self.entities[u]
+
+	def move_entity(self,u,coordinates):
+		self.entities[u]["coordinates"] = coordinates
+
+	def add_objective(self,objective):
+		if objective not in self.scoreboards:
+			self.scoreboards[objective] = {}
+
+	def remove_objective(self,objective):
+		if objective in self.scoreboards:
+			del self.scoreboards[objective]
+
+	def reset_entity_scores(self,u,objective=False):
+		if objective and objective in self.scoreboards:
+			if u in self.scoreboards[objective]:
+				del self.scoreboards[objective][u]
+		else:
+			for o in self.scoreboards:
+				if u in self.scoreboards[o]:
+					del self.scoreboards[o][u]
+
+	def set_entity_score(self,u,method,objective,count):
+		if objective in self.scoreboards:
+			if u not in self.scoreboards[objective]:
+				self.scoreboards[objective][u] = 0
+			if method == "set":
+				self.scoreboards[objective][u] = int(count)
+			elif method == "add":
+				self.scoreboards[objective][u] += int(count)
+			elif method == "remove":
+				self.scoreboards[objective][u] -= int(count)
+
+	def get_entity_score(self,u,objective):
+		if objective in self.scoreboards:
+			if u in self.scoreboards[objective]:
+				return self.scoreboards[objective][u]
+
+	def add_tag(self,u,tag):
+		if tag not in self.entities[u]["tags"]:
+			self.entities[u]["tags"].append(tag)
+
+	def remove_tag(self,u,tag):
+		if tag in self.entities[u]["tags"]:
+			self.entities[u].tags.remove(tag)
+
+	def get_entities(self,kwargs):
+		valid_entities = {}
+		coordinates = kwargs["coordinates"]
+		for u, e in self.entities.items():
+			if "u" in kwargs and u != kwargs["u"]:
+				continue
+
+			is_valid = True
+			for k, v in kwargs.items():
+				if k == "dx":
+					if abs(e["coordinates"][0] - coordinates[0]) > float(v):
+						is_valid = False
+						break
+				elif k == "dy":
+					if abs(e["coordinates"][1] - coordinates[1]) > float(v):
+						is_valid = False
+						break
+				elif k == "dz":
+					if abs(e["coordinates"][2] - coordinates[2]) > float(v):
+						is_valid = False
+						break
+				elif k == "name":
+					if e["name"] != v:
+						is_valid = False
+						break
+				elif k == "r":
+					if self.get_distance(coordinates,e["coordinates"]) > float(v):
+						is_valid = False
+						break
+				elif k == "rm":
+					if self.get_distance(coordinates,e["coordinates"]) <= float(v):
+						is_valid = False
+						break
+				elif k == "scores":
+					for s in v:
+						score = self.get_entity_score(u,s["objective"])
+						if "not" in s:
+							if score == s["not"]:
+								is_valid = False
+								break
+						if "min" in s and s["min"] != None:
+							if score == None or score < s["min"]:
+								is_valid = False
+								break
+						if "max" in s and s["max"] != None:
+							if score == None or score > s["max"]:
+								is_valid = False
+								break
+
+				elif k == "tags":
+					for t in v:
+						if t[0] != "!" and t not in e["tags"]:
+							is_valid = False
+							break
+						elif t[0] == "!" and t in e["tags"]:
+							is_valid = False
+							break
+				elif k == "type":
+					if e["entity"] != v:
+						is_valid = False
+						break
+			if is_valid:
+				valid_entities[u] = e
+
+		if "c" in kwargs:
+			c = kwargs["c"]
+			distances = []
+			for u, e in valid_entities.items():
+				distances.append((self.get_distance(e["coordinates"],coordinates),u))
+
+			if "random" in kwargs and kwargs["random"]:
+				random.shuffle(distances)
+			else:
+				distances.sort()
+
+			i = int(c)
+			while i < len(distances):
+				del valid_entities[distances[i][1]]
+				i += 1
+
+		return list(valid_entities.keys())
+
+	def get_distance(self,coordinates_a,coordinates_b):
+		dist = 0
+		for i in [0,1,2]:
+			diff = coordinates_a[i]-coordinates_b[i]
+			dist += diff * diff
+		return sqrt(dist)
+
+main_world = World()

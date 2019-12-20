@@ -1,0 +1,55 @@
+{
+	"execute" : [
+		[5,["target","target"],["coordinates","coordinates"],["command","command"]]
+	],
+	"detect": [
+		[6,["coordinates","coordinates"],["block","block"],["data","data"],["command","command"]]
+	],
+	"fill" : [
+		[7,["to_coordinates","coordinates"],["from_coordinates","coordinates"],["block","block"],["data","data"],["place_type",["outline","hollow","keep","outline"]]],
+		[10,["to_coordinates","coordinates"],["from_coordinates","coordinates"],["block","block"],["data","data"],["place_type",["replace"]],["r_block","block"],["r_data","data"]]
+	],
+	"function": [
+		[1,["path",[]]]
+	],
+	"kill": [
+		[1,["target","target"]]
+	],
+	"say": [
+		[1,["text","string"]]
+	],
+	"setblock": [
+		[4,["coordinates","coordinates"],["block","block"],["data","data"],["place_type",["replace","destroy","keep"]]]
+	],
+	"summon" : [
+		[1,["entity","entity"],["name",[]],["coordinates","coordinates"]],
+		[1,["entity","entity"],["coordinates","coordinates"],["event",[]],["name",[]]]
+	],
+	"tag": [
+		[3,["target","target"],["option",["add","remove"]],["name",[]]],
+ 		[2,["target","target"],["option",["list"]]]
+ 	],
+	"tp": [
+		[3,["coordinates","coordinates"],["check_block","boolean"]],
+		[5,["coordinates","coordinates"],["y_rot","int"],["x_rot","int"],["check_block","boolean"]],
+		[7,["coordinates","coordinates"],["facing",["facing"]],["l_coordinates","coordinates"],["check_block","boolean"]],
+		[5,["coordinates","coordinates"],["facing",["facing"]],["target","target"],["check_block","boolean"]],
+		[4,["victim","target"],["coordinates","coordinates"],["check_block","boolean"]],
+		[6,["victim","target"],["coordinates","coordinates"],["y_rot","int"],["x_rot","int"],["check_block","boolean"]],
+		[8,["victim","target"],["coordinates","coordinates"],["facing",["facing"]],["l_coordinates","coordinates"],["check_block","boolean"]],
+		[6,["victim","target"],["coordinates","coordinates"],["facing",["facing"]],["target","target"],["check_block","boolean"]],
+		[1,["destination","target"],["check_block","boolean"]],
+		[2,["victim","target"],["destination","target"],["check_block","boolean"]]
+	],
+	"scoreboard": [
+		[4,["type",["objectives"]],["method",["add"]],["objective",[]],["criterion",["dummy"]],["display",[]]],
+		[3,["type",["objectives"]],["method",["remove"]],["objective",[]]],
+		[4,["type",["objectives"]],["method",["setdisplay"]],["slot",["sidebar","list"]],["objective",[]],["direction",["ascending","descendong"]]],
+		[4,["type",["objectives"]],["method",["setdisplay"]],["slot",["belowname"]],["objective",[]]],
+		[3,["type",["players"]],["method",["reset"]],["target","target"],["objective",[]]],
+		[6,["type",["players"]],["method",["random"]],["target","target"],["objective",[]],["max","int"],["min","int"]],
+		[5,["type",["players"]],["method",["set","add","remove"]],["target","target"],["objective",[]],["count","int"]],
+		[7,["type",["players"]],["method",["operation"]],["target_a","target"],["objective_a",[]],["operator",["%=","*=","+=","-=","/=","<","=",">","><"]],["target_b","target"],["objective_b",[]]],
+		[4,["type",["players"]],["method",["input"]],["target","target"],["objective",[]]]
+	]
+}
