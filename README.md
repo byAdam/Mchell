@@ -61,8 +61,10 @@ There is also a number of flags you can specify:
 ## Custom Syntax
 scoreboard players input \<target> \<objective>
 - This command will read a line from STDIN
-- If the line is an integer, that integer will be saved to the target for that objective
-- If the line consists of a single UNICODE character, the UNICODE character code will be saved to the target for that objective
+- The input will be saved as a score to the targets for that objective
+- If the line is an integer, the input will the integer
+- If the line consists of a single UNICODE character, the input will be the UNICODE code of the character
+- If the line is blank, the input will be 0
 - If the line consists of more than one UNICODE character, an error will be raised
 - E.G scoreboard players input @a example
 
