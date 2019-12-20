@@ -298,16 +298,22 @@ class Command:
 			i = 0
 			while i < len(t):
 				if len(t[i]) > 1 and t[i][:2] in ["@s","@p","@r","@a","@e"]:
-					objective = None
+					is_character = False
 					if "*" in t[i]:
 					 	target, objective = t[i].split("*")
+					elif "#" in t[i]:
+						target, objective = t[i].split("#")
+						is_character = True
 					else:
 					 	target = t[i]
 
 					entities = self.get_entities(executed_by,executed_at,self.parse_target(target))
 					if entities:
 						if objective:
-							t[i] = ", ".join([str(main_world.get_entity_score(u,objective)) for u in entities])
+							if is_character:
+								t[i] = ", ".join([chr(main_world.get_entity_score(u,objective)) for u in entities])
+							else:
+								t[i] = ", ".join([str(main_world.get_entity_score(u,objective)) for u in entities])
 						else:
 							t[i] = ", ".join([main_world.entities[u]["name"] for u in entities])
 					else:
@@ -413,10 +419,16 @@ class Command:
 			elif self.parsed_arguments["method"] == "input":
 				inp = input()
 				if self.is_int(inp):
-					for u in self.get_entities(executed_by,executed_at,self.parsed_arguments["target"]):
-						main_world.set_entity_score(u,"set",self.parsed_arguments["objective"],int(inp))
+					count = int(inp)
+				elif len(inp) == 1:
+					count = ord(inp)
+				elif not inp:
+					count = 0
 				else:
 					raise Exception("Invalid Input: {}".format(inp))
+
+				for u in self.get_entities(executed_by,executed_at,self.parsed_arguments["target"]):
+					main_world.set_entity_score(u,"set",self.parsed_arguments["objective"],count)
 
 
 argument_types = ["target","command","coordinates","block","data","string","int","boolean","entity"]
