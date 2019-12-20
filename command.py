@@ -1,6 +1,7 @@
 import json, sys
 from world import main_world
 import re, random
+import os
 
 class Command:
 	def __init__(self,line):
@@ -417,7 +418,7 @@ class Command:
 							main_world.set_entity_score(u_b,"set",self.parsed_arguments["objective_b"],tmp)
 						main_world.set_entity_score(u_a,"set",self.parsed_arguments["objective_a"],score_a)
 			elif self.parsed_arguments["method"] == "input":
-				inp = input()
+				inp = sys.stdin.readline()[:-1]
 				if self.is_int(inp):
 					count = int(inp)
 				elif len(inp) == 1:
@@ -433,5 +434,10 @@ class Command:
 
 argument_types = ["target","command","coordinates","block","data","string","int","boolean","entity"]
 
-with open("schemas/command.json") as f:
+if hasattr(sys, "frozen"):
+    p = os.path.dirname(sys.executable)
+else:
+	p = os.path.dirname(__file__)
+
+with open("{}/schemas/command.json".format(p)) as f:
 	command_schema = json.load(f)
