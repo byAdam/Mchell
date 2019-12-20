@@ -30,6 +30,8 @@ class World:
 		self.load_all_functions(directory)
 
 	def load_all_functions(self,folder):
+		if folder == "":
+			folder = None
 		for name in os.listdir(folder):
 			if folder != None:
 				path = folder + "/" + name
