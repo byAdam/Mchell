@@ -14,8 +14,8 @@ Many of the core Minecraft features have been implemented into MCF. These includ
 ## What can't it do?
 At the moment, there is no ability to make any system calls except reading from STDIN and writing to STDOUT. MCF is turing complete though, so go nuts!
 
-## Installation and Use
-### Download MCF V1.0 for Windows
+# Installation and Use
+## Download MCF V1.0 for Windows
 
 ## Using MCF
 When you install MCF, it adds "mcf" as a command to command prompt. 
