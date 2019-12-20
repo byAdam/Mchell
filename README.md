@@ -1,6 +1,6 @@
 ![Logo](icon.png "Logo")
 ### A Minecraft Bedrock Function interpreter and shell written in Python
-
+***
 # FAQ
 ## What is it?
 It is a interpreter and shell for running Minecraft Bedrock functions and commands. It allows you to write command line programs just using Minecraft commands, essentially making it into a programming language! It has a few added features but at its core, it is the same as it is in Minecraft.
@@ -13,9 +13,10 @@ Many of the core Minecraft features have been implemented into MCF. These includ
 
 ## What can't it do?
 At the moment, there is no ability to make any system calls except reading from STDIN and writing to STDOUT. MCF is turing complete though, so go nuts!
-
+***
 # Installation and Use
-## Download MCF V1.0.0-Beta for Windows
+## Download 
+- **[MCF V1.0.0-beta for Windows](https://github.com/byAdam/MCF/releases/tag/V1.0.0-beta)**
 
 ## Using MCF
 When you install MCF, it adds "mcf" as a command to command prompt. 
@@ -26,7 +27,9 @@ There is also a number of flags you can specify:
 - -s = Save the world to "world.json" in the root directory on exit
 - -t = Run the function 20 times per second until you exit
 
-
+## Bugs and Issues
+Please report any bugs and issues you find [here](https://github.com/byAdam/MCF/issues). This is a pre-release so there is likely to be many issues! If you have any questions or queries, feel free to contact me by email (adambrady2000@gmail.com) or on [Twitter](https://twitter.com/byAdam_Net)
+***
 # Technical Details
 
 ## Implemented Commands
