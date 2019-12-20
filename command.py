@@ -300,6 +300,7 @@ class Command:
 			while i < len(t):
 				if len(t[i]) > 1 and t[i][:2] in ["@s","@p","@r","@a","@e"]:
 					is_character = False
+					objective = False
 					if "*" in t[i]:
 					 	target, objective = t[i].split("*")
 					elif "#" in t[i]:

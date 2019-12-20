@@ -4,6 +4,8 @@ scoreboard objectives add prime_tmp dummy
 scoreboard objectives add prime_calc dummy
 
 ## Waits for user input
+say Make sure you are running this program with the -e flag!
+say Enter your number:
 scoreboard players input @s prime
 scoreboard players set @s prime_calc 1
 
