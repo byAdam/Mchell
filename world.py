@@ -27,25 +27,14 @@ class World:
 						self.scoreboards = world["scoreboards"]
 					except:
 						pass
-		self.load_all_functions(directory)
-
-	def load_all_functions(self,folder):
-		if folder == "":
-			folder = None
-		for name in os.listdir(folder):
-			if folder != None:
-				path = folder + "/" + name
-			else:
-				path = name
-			if os.path.isfile(path):
-				self.load_function(path)
-			else:
-				self.load_all_functions(path)
 
 	def load_function(self,relpath):
-		with open(relpath) as f:
-			if relpath[-11:] == ".mcfunction":
-				self.functions[os.path.relpath(relpath[:-11],self.directory)] = Function(relpath[:-11],f.readlines())
+		path = os.path.join(self.directory,relpath) + ".mcfunction"
+		if os.path.isfile(path):
+			with open(path) as f:
+				self.functions[relpath] = Function(relpath,f.readlines())
+				return True
+		return False
 
 
 	def place_block(self,coordinates,block,data=False):

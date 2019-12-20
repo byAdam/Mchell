@@ -127,3 +127,4 @@ dmypy.json
 stdin.txt
 functions/
 build.bat
+test.mcfunction

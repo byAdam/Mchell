@@ -279,8 +279,10 @@ class Command:
 			x += 1
 
 	def execute_function(self,executed_by,executed_at,depth):
-		if self.parsed_arguments["path"] in main_world.functions:
+		if self.parsed_arguments["path"] in main_world.functions or main_world.load_function(self.parsed_arguments["path"]):
 			main_world.functions[self.parsed_arguments["path"]].execute(executed_by,executed_at,depth + 1)
+		else:
+			raise Exception("Unknown Function: {}".format(self.parsed_arguments["path"]))
 
 	def execute_kill(self,executed_by,executed_at):
 		for u in self.get_entities(executed_by,executed_at,self.parsed_arguments["target"]):
