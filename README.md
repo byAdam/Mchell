@@ -71,12 +71,17 @@ scoreboard players input \<target> \<objective>
 - If the line consists of more than one UNICODE character, an error will be raised
 - E.G scoreboard players input @a example
 
-/say
-- /say writes a line to STDOUT
+say
+- say writes a line to STDOUT
 - SELECTOR\*OBJECTIVE = Returns the score for the objective for the target entities
   - E.G @a\*example
 - SELECTOR#OBJECTIVE = Returns the UNICODE Character corresponding to the score for the objective for the target entities
   - E.G @a#example
+- $(x,y,z) = Returns block and data value at those coordinates in the form "block:data"
+  - E.G $(0,~5,10)
+
+exit
+- will exit the program
 
 ## Structure
 ### World

@@ -18,8 +18,12 @@ class Command:
 		if self.command_type in command_schema:
 			for variant in command_schema[self.command_type]:
 				## Loops through and see if any of the different variants of the commands apply for the arguments
-				parsed_arguments = self.get_parsed_arguments(variant[0],variant[1:])
-				if parsed_arguments:
+				if type(variant) != int:
+					var_args = variant[1:] 
+					parsed_arguments = self.get_parsed_arguments(variant[0],var_args)
+				else:
+					parsed_arguments = {}
+				if parsed_arguments != False:
 					self.parsed_arguments = parsed_arguments
 					self.is_valid = True
 
@@ -243,8 +247,13 @@ class Command:
 				self.execute_tp(executed_by,executed_at)
 			elif self.command_type == "scoreboard":
 				self.execute_scoreboard(executed_by,executed_at)
+			elif self.command_type == "exit":
+				self.execute_exit()
 		else:
 			raise Exception("Invalid command: {}".format(self.line))
+
+	def execute_exit(self):
+		sys.exit(0)
 
 	def execute_execute(self,executed_by,executed_at,depth):
 		command = self.parsed_arguments["command"]

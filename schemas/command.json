@@ -51,5 +51,6 @@
 		[5,["type",["players"]],["method",["set","add","remove"]],["target","target"],["objective",[]],["count","int"]],
 		[7,["type",["players"]],["method",["operation"]],["target_a","target"],["objective_a",[]],["operator",["%=","*=","+=","-=","/=","<","=",">","><"]],["target_b","target"],["objective_b",[]]],
 		[4,["type",["players"]],["method",["input"]],["target","target"],["objective",[]]]
-	]
+	],
+	"exit" : [0]
 }
