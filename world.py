@@ -101,7 +101,7 @@ class World:
 
 	def remove_tag(self,u,tag):
 		if tag in self.entities[u]["tags"]:
-			self.entities[u].tags.remove(tag)
+			self.entities[u]["tags"].remove(tag)
 
 	def get_entities(self,kwargs):
 		valid_entities = {}
@@ -158,6 +158,7 @@ class World:
 							is_valid = False
 							break
 						elif t[0] == "!" and t in e["tags"]:
+							print("h")
 							is_valid = False
 							break
 				elif k == "type":
@@ -167,7 +168,7 @@ class World:
 			if is_valid:
 				valid_entities[u] = e
 
-		if "c" in kwargs:
+		if "c" in kwargs or ("random" in kwargs and kwargs["random"]):
 			c = kwargs["c"]
 			distances = []
 			for u, e in valid_entities.items():
@@ -180,10 +181,12 @@ class World:
 
 			i = int(c)
 			while i < len(distances):
-				del valid_entities[distances[i][1]]
-				i += 1
+				del distances[i]
 
-		return list(valid_entities.keys())
+			return [e[1] for e in distances]
+
+		else:
+			return list(valid_entities.keys())
 
 	def get_distance(self,coordinates_a,coordinates_b):
 		dist = 0
@@ -193,3 +196,6 @@ class World:
 		return sqrt(dist)
 
 main_world = World()
+
+if __name__ == "__main__":
+	print(main_world.calculare_coordinates((1,0,0),("~","~","")))

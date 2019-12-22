@@ -126,7 +126,7 @@ class Command:
 			x = "~"
 			y = "~"
 			z = "~"
-
+			
 			for a in args:
 				if not a:
 					continue
@@ -178,17 +178,23 @@ class Command:
 				target_parsed["u"] = True
 
 			target_parsed["coordinates"] = (x,y,z)
+
 			return target_parsed
 		else:
 			return target
 
-	def get_entities(self,executed_by,executed_at,target):
-		if "u" in target:
-			if not executed_by:
-				return []
-			target["u"] = executed_by
-		target["coordinates"] = self.calculate_coordinates(executed_at,target["coordinates"])
-		return main_world.get_entities(target)
+	def get_entities(self,executed_by,executed_at,t):
+		target = dict(t)
+
+		if type(target) == str:
+			return [target]
+		else:
+			if "u" in target:
+				if not executed_by:
+					return []
+				target["u"] = executed_by
+			target["coordinates"] = self.calculate_coordinates(executed_at,target["coordinates"])
+			return main_world.get_entities(target)
 
 	def calculate_coordinates(self,executed_at,coordinates):
 		def calc(c1,c2):
@@ -204,6 +210,8 @@ class Command:
 					return c1
 			else:
 				return int(c2)
+
+
 		if coordinates:
 			x = calc(executed_at[0],str(coordinates[0]))
 			y = calc(executed_at[1],str(coordinates[1]))
@@ -212,10 +220,13 @@ class Command:
 			x = executed_at[0]
 			y = executed_at[1]
 			z = executed_at[2]
+
 		return (x,y,z)
 
-	def execute(self,executed_by=False,executed_at=False,depth=0):
-		if not executed_at:
+	def execute(self,executed_by=False,executed_at_raw=False,depth=0):
+		if executed_at_raw:
+			executed_at = self.calculate_coordinates(main_world.entities[executed_by]["coordinates"],executed_at_raw)
+		else:
 			if executed_by:
 				try:
 					executed_at = main_world.entities[executed_by]["coordinates"]
@@ -223,6 +234,7 @@ class Command:
 					executed_at = (0,0,0)
 			else:
 				executed_at = (0,0,0)
+
 
 		if self.is_valid:
 			if self.command_type == "execute":
@@ -232,7 +244,7 @@ class Command:
 			elif self.command_type == "fill":
 				self.execute_fill(executed_by,executed_at)
 			elif self.command_type == "function":
-				self.execute_function(executed_by,executed_at,depth)
+				self.execute_function(executed_by,executed_at_raw,depth)
 			elif self.command_type == "kill":
 				self.execute_kill(executed_by,executed_at)
 			elif self.command_type == "say":
@@ -249,17 +261,22 @@ class Command:
 				self.execute_scoreboard(executed_by,executed_at)
 			elif self.command_type == "exit":
 				self.execute_exit()
+			elif self.command_type == "debug":
+				self.execute_debug(executed_by,executed_at)
 		else:
 			raise Exception("Invalid command: {}".format(self.line))
 
 	def execute_exit(self):
 		sys.exit(0)
 
+	def execute_debug(self,executed_by,executed_at):
+		for u in self.get_entities(executed_by,executed_at,self.parsed_arguments["target"]):
+			print("DEBUG",main_world.entities[u])
+
 	def execute_execute(self,executed_by,executed_at,depth):
 		command = self.parsed_arguments["command"]
 		for u in self.get_entities(executed_by,executed_at,self.parsed_arguments["target"]):
-			coordinates = self.calculate_coordinates(main_world.entities[u]["coordinates"],self.parsed_arguments["coordinates"])
-			command.execute(u,coordinates,depth + 1)
+			command.execute(u,self.parsed_arguments["coordinates"],depth + 1)
 
 	def execute_detect(self,executed_by,executed_at):
 		current_block = main_world.get_block(self.calculate_coordinates(executed_at,self.parsed_arguments["coordinates"]))
@@ -372,6 +389,8 @@ class Command:
 			else:
 				destination_u = self.get_entities(executed_by,executed_at,self.parsed_arguments["destination"])
 				if len(destination_u) > 1:
+					return False
+				elif len(destination_u) == 0:
 					return False
 				else:
 					coordinates = main_world.entities[destination_u[0]]["coordinates"]
