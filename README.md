@@ -81,7 +81,10 @@ say
   - E.G $(0,~5,10)
 
 exit
-- will exit the program
+- Will exit the program
+
+debug \<target>
+- Will output the entity data for all targeted entities
 
 ## Structure
 ### World
