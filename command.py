@@ -269,8 +269,12 @@ class Command:
 		sys.exit(0)
 
 	def execute_debug(self,executed_by,executed_at):
+		prefix = "DEBUG"
+		if self.parsed_arguments["prefix"]:
+			prefix = self.parsed_arguments["prefix"]
 		for u in self.get_entities(executed_by,executed_at,self.parsed_arguments["target"]):
-			print("DEBUG",main_world.entities[u])
+
+			print(prefix,main_world.entities[u])
 
 	def execute_execute(self,executed_by,executed_at):
 		command = self.parsed_arguments["command"]

@@ -53,5 +53,5 @@
 		[4,["type",["players"]],["method",["input"]],["target","target"],["objective",[]]]
 	],
 	"exit" : [],
-	"debug": [[1,["target","target"]]]
+	"debug": [[1,["target","target"],["prefix",[]]]]
 }
