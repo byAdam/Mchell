@@ -14,6 +14,7 @@ class Command:
 		self.command_type = self.get_command_type()
 		self.raw_arguments = self.get_raw_arguments()
 		self.parsed_arguments = False
+		self.errors = []
 
 		if self.command_type in command_schema:
 			for variant in command_schema[self.command_type]:
@@ -22,16 +23,31 @@ class Command:
 					var_args = variant[1:] 
 					parsed_arguments = self.get_parsed_arguments(variant[0],var_args)
 				else:
-					parsed_arguments = {}
-				if parsed_arguments != False:
+					parsed_arguments = {"_success":False,"pos":0}
+				if parsed_arguments["_success"]:
 					self.parsed_arguments = parsed_arguments
 					self.is_valid = True
+					break
+				else:
+					self.errors.append(parsed_arguments)
 
 		if not self.is_valid:
-			raise Exception("Invalid command: {}".format(self.line))
+			furthest_error = {"pos":-1}
+			for error in self.errors:
+				if error["pos"] > furthest_error["pos"]:
+					furthest_error = error
+			e = "Invalid command: {}".format(self.line)
+			e += "\n{}: {}".format(furthest_error["message"],furthest_error["value"])
+			raise Exception(e)
 
 	def get_parsed_arguments(self,min_len,variant):
-		command_arguments = {}
+		def return_error(message):
+			if i < len(self.raw_arguments):
+				return {"_success":False,"pos":j,"value":self.raw_arguments[i],"message":message}
+			else:
+				return {"_success":False,"pos":j,"value":"","message":message}
+
+		command_arguments = {"_success":True}
 		for a in variant:
 			command_arguments[a[0]] = False
 		i = 0
@@ -45,7 +61,7 @@ class Command:
 				if self.raw_arguments[i] in arg_type or len(arg_type) == 0:
 					command_arguments[arg_name] = self.raw_arguments[i]
 				else:
-					return False
+					return return_error("Invalid option choice")
 			elif arg_type in argument_types:
 				if arg_type == "string":
 					command_arguments[arg_name] = " ".join(self.raw_arguments[i:])
@@ -63,35 +79,43 @@ class Command:
 							command_arguments[arg_name] = (x,y,z)
 							i += 2
 						else:
-							return False
+							return return_error("Invalid Coordinates")
 					else:
-						return False
+						return return_error("Invalid Coordinates")
 				elif arg_type == "command":
 					command_arguments[arg_name] = Command(" ".join(self.raw_arguments[i:]))
 					i = len(self.raw_arguments)
-				elif arg_type == "data" or arg_type == "int":
+				elif arg_type == "int":
 					if self.is_int(self.raw_arguments[i]):
 						command_arguments[arg_name] = int(self.raw_arguments[i])
 					else:
-						return False
+						return return_error("Invalid integer")
+				elif arg_type == "data":
+					if self.is_int(self.raw_arguments[i]):
+						if int(self.raw_arguments[i]) >= 0 and int(self.raw_arguments[i]) <= 16:
+							command_arguments[arg_name] = int(self.raw_arguments[i])
+						else:
+							return return_error("Data Value is not between 0 and 16")
+					else:
+						return return_error("Data Value is not an integer")
 				elif arg_type == "boolean":
 					if self.raw_arguments[i] == "true":
 						command_arguments[arg_name] = True
 					elif self.raw_arguments[i] == "false":
 						command_arguments[arg_name] = False
 					else:
-						return False
+						return return_error("Boolean is not true or false")
 				elif arg_type == "target":
 					command_arguments[arg_name] = self.parse_target(self.raw_arguments[i])
 			else:
-				raise Exception("Unknown arg_type {}".format(arg_type))
+				raise Exception("Unknown Argument Type: {}".format(arg_type))
 
 			i += 1
 			j += 1
 
 		## If the command didn't form a command of the minimum length
 		if i < min_len or i < len(self.raw_arguments):
-			return False
+			return return_error("Command is too short")
 		return command_arguments
 
 	def is_int(self,c):
@@ -319,8 +343,8 @@ class Command:
 			main_world.remove_entity(u)
 
 	def execute_setblock(self,executed_by,executed_at):
-			coordinates = self.calculate_coordinates(executed_at,self.parsed_arguments["coordinates"])
-			main_world.place_block(coordinates,self.parsed_arguments["block"],self.parsed_arguments["data"])
+		coordinates = self.calculate_coordinates(executed_at,self.parsed_arguments["coordinates"])
+		main_world.place_block(coordinates,self.parsed_arguments["block"],self.parsed_arguments["data"])
 
 	def execute_say(self,executed_by,executed_at):
 		def evaluate_text(text):
