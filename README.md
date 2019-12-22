@@ -83,8 +83,9 @@ say
 exit
 - Will exit the program
 
-debug \<target>
+debug \<target> \[prefix]
 - Will output the entity data for all targeted entities
+- The prefix will be at the start of the line before the data, by default, it is "DEBUG"
 
 ## Structure
 ### World
