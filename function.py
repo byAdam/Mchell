@@ -10,10 +10,11 @@ class Function():
 		from command import Command
 		return Command(line.strip())
 
-	def execute(self,executed_by=False,executed_at=False,depth=0):
-		if depth > 300:
-			return False
-
+	def add_to_command_stack(self,executed_by=False,executed_at=False):
+		from world import main_world
+		command_stack = []
 		for command in self.commands:
 			if command.is_valid:
-				command.execute(executed_by,executed_at,depth)
+				command_stack.append({"command":command,"executed_by":executed_by,"executed_at":executed_at})
+
+		main_world.command_stack = command_stack + main_world.command_stack

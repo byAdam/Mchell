@@ -8,6 +8,8 @@ class World:
 		self.entities = {}
 		self.scoreboards = {}
 		self.functions = {}
+		self.command_stack = []
+		self.is_processing = False
 		self.directory = ""
 
 	def save_world(self):
@@ -27,6 +29,13 @@ class World:
 						self.scoreboards = world["scoreboards"]
 					except:
 						pass
+
+	def process_command_stack(self):
+		self.is_processing = True
+		while self.command_stack:
+			command_info = self.command_stack.pop(0)
+			command_info["command"].execute(command_info["executed_by"],command_info["executed_at"])
+		self.is_processing = False
 
 	def load_function(self,relpath):
 		path = os.path.join(self.directory,relpath) + ".mcfunction"

@@ -47,10 +47,12 @@ if __name__ == "__main__":
 			## Loops 20 times a second
 			if "-t" in flags:
 				while True:
-					main_world.functions[os.path.relpath(fname[:-11],main_world.directory)].execute(executed_by)
-					time.sleep(0.05)
+					main_world.functions[os.path.relpath(fname[:-11],main_world.directory)].add_to_command_stack(executed_by)
+					if not main_world.is_processing:
+						main_world.process_command_stack()
 			else:
-				main_world.functions[os.path.relpath(fname[:-11],main_world.directory)].execute(executed_by)
+				main_world.functions[os.path.relpath(fname[:-11],main_world.directory)].add_to_command_stack(executed_by)
+				main_world.process_command_stack()
 		else:
 			raise Exception("Unknown File: {}".format(fname))
 	else:

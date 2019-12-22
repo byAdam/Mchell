@@ -223,7 +223,7 @@ class Command:
 
 		return (x,y,z)
 
-	def execute(self,executed_by=False,executed_at_raw=False,depth=0):
+	def execute(self,executed_by=False,executed_at_raw=False):
 		if executed_at_raw:
 			executed_at = self.calculate_coordinates(main_world.entities[executed_by]["coordinates"],executed_at_raw)
 		else:
@@ -235,16 +235,15 @@ class Command:
 			else:
 				executed_at = (0,0,0)
 
-
 		if self.is_valid:
 			if self.command_type == "execute":
-				self.execute_execute(executed_by,executed_at,depth)
+				self.execute_execute(executed_by,executed_at)
 			elif self.command_type == "detect":
 				self.execute_detect(executed_by,executed_at)
 			elif self.command_type == "fill":
 				self.execute_fill(executed_by,executed_at)
 			elif self.command_type == "function":
-				self.execute_function(executed_by,executed_at_raw,depth)
+				self.execute_function(executed_by,executed_at_raw)
 			elif self.command_type == "kill":
 				self.execute_kill(executed_by,executed_at)
 			elif self.command_type == "say":
@@ -273,10 +272,10 @@ class Command:
 		for u in self.get_entities(executed_by,executed_at,self.parsed_arguments["target"]):
 			print("DEBUG",main_world.entities[u])
 
-	def execute_execute(self,executed_by,executed_at,depth):
+	def execute_execute(self,executed_by,executed_at):
 		command = self.parsed_arguments["command"]
 		for u in self.get_entities(executed_by,executed_at,self.parsed_arguments["target"]):
-			command.execute(u,self.parsed_arguments["coordinates"],depth + 1)
+			command.execute(u,self.parsed_arguments["coordinates"])
 
 	def execute_detect(self,executed_by,executed_at):
 		current_block = main_world.get_block(self.calculate_coordinates(executed_at,self.parsed_arguments["coordinates"]))
@@ -305,9 +304,9 @@ class Command:
 				y += 1
 			x += 1
 
-	def execute_function(self,executed_by,executed_at,depth):
+	def execute_function(self,executed_by,executed_at):
 		if self.parsed_arguments["path"] in main_world.functions or main_world.load_function(self.parsed_arguments["path"]):
-			main_world.functions[self.parsed_arguments["path"]].execute(executed_by,executed_at,depth + 1)
+			main_world.functions[self.parsed_arguments["path"]].add_to_command_stack(executed_by,executed_at)
 		else:
 			raise Exception("Unknown Function: {}".format(self.parsed_arguments["path"]))
 

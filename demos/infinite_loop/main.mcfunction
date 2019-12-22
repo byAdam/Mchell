@@ -1,0 +1,2 @@
+say Loop
+function main
