@@ -498,5 +498,10 @@ if hasattr(sys, "frozen"):
 else:
     p = os.path.dirname(__file__)
 
-with open("{}/schemas/command.json".format(p)) as f:
+if p:
+    path = "{}/schemas/command.json".format(p)
+else:
+    path = "schemas/command.json"
+
+with open(path) as f:
     command_schema = json.load(f)

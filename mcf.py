@@ -1,4 +1,4 @@
-import os, sys, atexit, time
+import os, sys, atexit, time, json
 from function import Function
 from command import Command
 from world import main_world
@@ -11,24 +11,31 @@ def return_options(args):
 
     for a in args:
         ## Splits arguments if they have a "=" in them
+        v = False
         if "=" in a:
             o, v = a.split("=")
         else:
             o = a
 
         if o[0] == "-":
-            if o in ("-h","--help"):
-                options["help"] = True
-            elif o in ("-l","--loop"):
-                options["loop"] = True
-            elif o in ("-w","--write"):
-                options["write"] = True
-            elif o in ("-r","--read"):
-                options["read"] = True
-            elif o in ("-d","--dir"):
-                options["dir"] = v
-            else:
-                raise Exception("Unknown option: {}".format(o))
+            valid_option = False
+            for option in option_schema:
+                option_data = option_schema[option]
+                if o in option_data["flags"]:
+                    if option_data["has_value"]:
+                        if v:
+                            options[option] = v
+                        else:
+                            raise Exception("Missing Value: {}".format(o))
+                    else:
+                        options[option] = True
+
+                    valid_option = True
+                    break
+
+            if not valid_option:
+                raise Exception("Unknown Option: {}".format(o))
+
         elif not options["path"]:
             options["path"] = o
 
@@ -50,11 +57,39 @@ def shell():
         inp = input("> ")
         command = Command(inp).execute("primary")
 
+def return_option_schema():
+    if hasattr(sys, "frozen"):
+        p = os.path.dirname(sys.executable)
+    else:
+        p = os.path.dirname(__file__)
+
+    if p:
+        path = "{}/schemas/option.json".format(p)
+    else:
+        path = "schemas/option.json"
+
+    with open(path) as f:
+        return json.load(f)
+
+def help():
+    for option in option_schema:
+        option_data = option_schema[option]
+        flags = ", ".join(option_data["flags"])
+        if option_data["has_value"]:
+            flags += " = VALUE"
+        description = option_data["description"]
+        print("{}: {}".format(flags, description))
+    sys.exit(0)
+
 if __name__ == "__main__":
     args = sys.argv[1:]
 
+    option_schema = return_option_schema()
     options = return_options(args)
     
+    if options["help"]:
+        help()
+
     if options["read"]:
         main_world.load_world(options["dir"],True)
     else:
