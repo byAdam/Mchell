@@ -22,13 +22,11 @@ At the moment, there is no ability to make any system calls except reading from 
 When you install MCF, it adds "mcf" as a command to command prompt. 
 You can run a function on the interpreter by specifying the path of the file as a command line argument. The directory of the function will act as the root directory. If no path is specified, the interpreter will enter the shell.
 There is also a number of flags you can specify:
-- -h, --help: Will output a list of valid arguments
-- -r,--read: Will read world.json in the base directory
-- -w,--write: Will write to "world.json" in the base directory on exit
-- -l,--loop: Will run the function 20 times per second until you exit
-- -d,--dir: Will set the base directory
-  - Use in the form "-d=DIRECTORY"
-  - By default, the base directory will be the directory of the called function
+- -h, --help: Output a list of valid arguments
+- -r, --read: Import world from 'world.json'
+- -w, --write: Export world to 'world.json' on exit
+- -l, --loop: Run the function 20 times per second until exit
+- -d, --dir = VALUE: Set the base directory of the function
 
 ## Bugs and Issues
 Please report any bugs and issues you find [here](https://github.com/byAdam/MCF/issues). This is a pre-release so there is likely to be many issues! If you have any questions or queries, feel free to contact me by email (adambrady2000@gmail.com) or on [Twitter](https://twitter.com/byAdam_Net)
