@@ -16,7 +16,7 @@ At the moment, there is no ability to make any system calls except reading from 
 ***
 # Installation and Use
 ## Download 
-- **[MCF V1.0.0-beta for Windows](https://github.com/byAdam/MCF/releases/tag/V1.0.0-beta)**
+- **[MCF V1.0.0-beta2 for Windows](https://github.com/byAdam/MCF/releases/tag/V1.0.0-beta2)**
 
 ## Using MCF
 When you install MCF, it adds "mcf" as a command to command prompt. 
