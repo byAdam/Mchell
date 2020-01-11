@@ -288,9 +288,7 @@ class Command:
             elif self.command_type == "exit":
                 self.execute_exit()
             elif self.command_type == "debug":
-                self.execute_debug(executed_by,executed_at)            
-            elif self.command_type == "camera":
-                self.execute_camera(executed_by,executed_at)
+                self.execute_debug(executed_by,executed_at)
         else:
             raise Exception("Invalid command: {}".format(self.line))
 
@@ -492,26 +490,6 @@ class Command:
                 for u in self.get_entities(executed_by,executed_at,self.parsed_arguments["target"]):
                     main_world.set_entity_score(u,"set",self.parsed_arguments["objective"],count)
 
-    def execute_camera(self,executed_by,executed_at):
-        coordinates = self.parsed_arguments["coordinates"]
-        width = self.parsed_arguments["width"]
-        height = self.parsed_arguments["height"]
-        facing = self.parsed_arguments["facing"]
-
-
-        if facing == "+x":
-            top_right = (0,"~"+str(height),"~"+str(width))
-        elif facing == "-x":
-            top_right = (0,"~"+str(height),"~-"+str(width))
-        elif facing == "+z":
-            top_right = ("~-"+str(width),"~"+str(height),0)
-        elif facing == "-z":
-            top_right = ("~"+str(width),"~"+str(height),0)
-
-        coordinates_a = self.calculate_coordinates(executed_at,coordinates)
-        coordinates_b = self.calculate_coordinates(coordinates_a,top_right)
-
-        main_world.update_camera(coordinates_a,coordinates_b,width,height,facing)
 
 argument_types = ["target","command","coordinates","block","data","string","int","boolean","entity"]
 

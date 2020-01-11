@@ -57,33 +57,6 @@ class World:
         else:
             return {"block":"air","data":0}
 
-    def get_blocks(self,coordinates_a,coordinates_b,is_relative=True):
-        min_x = min(coordinates_a[0],coordinates_b[0])
-        min_y = min(coordinates_a[1],coordinates_b[1])
-        min_z = min(coordinates_a[2],coordinates_b[2])     
-        max_x = max(coordinates_a[0],coordinates_b[0])
-        max_y = max(coordinates_a[1],coordinates_b[1])
-        max_z = max(coordinates_a[2],coordinates_b[2])
-
-        blocks = {} 
-
-        x = min_x
-        while x <= max_x:
-            y = min_y
-            while y <= max_y:
-                z = min_z
-                while z <= max_z:
-                    if is_relative:
-                        k = (x-coordinates_a[0],y-coordinates_a[1],z-coordinates_a[2])
-                    else:
-                        k = (x,y,z)
-                    blocks[k] = self.get_block((x,y,z))   
-                    z += 1
-                y += 1
-            x += 1
-
-        return blocks
-
     def place_entity(self,coordinates,entity,name=False,u=False):
         if not name:
             name = entity
@@ -194,6 +167,7 @@ class World:
                             is_valid = False
                             break
                         elif t[0] == "!" and t in e["tags"]:
+                            print("h")
                             is_valid = False
                             break
                 elif k == "type":

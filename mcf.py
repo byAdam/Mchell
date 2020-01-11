@@ -1,14 +1,13 @@
-import os, sys, atexit, time, json,random
+import os, sys, atexit, time, json
 from function import Function
 from command import Command
 from world import main_world
-import camera
 
 def exit_handler():
     main_world.save_world()
 
 def return_options(args):
-    options = {"help":False,"loop":False,"write":False,"read":False,"path":False,"dir":False,"camera":False}
+    options = {"help":False,"loop":False,"write":False,"read":False,"path":False,"dir":False}
 
     for a in args:
         ## Splits arguments if they have a "=" in them
@@ -72,10 +71,6 @@ def return_option_schema():
     with open(path) as f:
         return json.load(f)
 
-def loop():
-    run_function(main_function)
-    camera.camera.root.after(50,loop)
-
 def help():
     for option in option_schema:
         option_data = option_schema[option]
@@ -107,25 +102,15 @@ if __name__ == "__main__":
 
     if options["path"]:
         if os.path.isfile(options["path"]):
-            if options["camera"]:
-                camera.create_camera()
-
             main_function = os.path.relpath(options["path"],main_world.directory)
             ## Remove file type
             main_function = ".".join(main_function.split(".")[:-1])
 
             main_world.load_function(main_function)
-
-  
             run_function(main_function)
             # If loop is true
             while options["loop"]:
-                time.sleep(0.05)
-                if options["camera"]:
-                    camera.camera.root.update()
                 run_function(main_function)
-                if options["camera"]:
-                    camera.camera.root.update()
         else:
             raise Exception("Unknown File: {}".format(options["path"]))
     else:

@@ -53,6 +53,5 @@
 		[4,["type",["players"]],["method",["input"]],["target","target"],["objective",[]]]
 	],
 	"exit" : [],
-	"debug": [[1,["target","target"],["prefix",[]]]],
-	"camera": [[6,["coordinates","coordinates"],["width","int"],["height","int"],["facing",["+x","-x","+z","-z"]]]]
+	"debug": [[1,["target","target"],["prefix",[]]]]
 }
