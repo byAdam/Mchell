@@ -3,5 +3,6 @@
 "read":{"flags":["-r","--read"],"description":"Import world from 'world.json'","has_value":false},
 "write":{"flags":["-w","--write"],"description":"Export world to 'world.json' on exit","has_value":false},
 "loop":{"flags":["-l","--loop"],"description":"Run the function 20 times per second until exit","has_value":false},
-"dir":{"flags":["-d","--dir"],"description":"Set the base directory of the function","has_value":true}
+"dir":{"flags":["-d","--dir"],"description":"Set the base directory of the function","has_value":true},
+"camera":{"flags":["-c","--camera"],"description":"Allows use of the Camera command","has_value":false}
 }
