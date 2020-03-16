@@ -88,6 +88,20 @@ debug \<target> \[prefix]
 - Will output the entity data for all targeted entities
 - The prefix will be at the start of the line before the data, by default, it is "DEBUG"
 
+def FUNC_NAME
+- You can define functions within function files
+- You do this by typing `def **FUNC_NAME**` followed by a number of indented lines
+- Note: When a function is called for the first time, any functions defined within it will overide other functions with the same name
+- E.G
+```
+def loop
+    say This is a loop
+    function loop
+
+say Before Loop
+function loop
+```
+
 ## Structure
 ### World
 A world consist of: Blocks, Entities, Scoreboard Objectives
