@@ -289,6 +289,8 @@ class Command:
                 self.execute_exit()
             elif self.command_type == "debug":
                 self.execute_debug(executed_by,executed_at)
+            elif self.command_type == "def":
+                self.execute_define(executed_by,executed_at)
         else:
             raise Exception("Invalid command: {}".format(self.line))
 

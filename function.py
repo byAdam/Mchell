@@ -1,10 +1,31 @@
 class Function():
     def __init__(self,relpath,lines):
         self.relpath = relpath
-
         self.commands = []
-        for line in lines:
-            self.commands.append(self.create_command_object(line))
+        self.process_lines(lines)
+
+    def process_lines(self, lines):
+        from world import main_world
+        i = 0
+        while i < len(lines):
+            line = lines[i]
+
+            if line.startswith("def"):
+                subfunc_name = line[4:].strip()
+                subfunc_lines = []
+
+                j = i + 1
+                while j < len(lines) and (lines[j].startswith("\t") or lines[j].isspace()):
+                    subfunc_lines.append(lines[j][1:])
+                    j += 1
+                i = j - 1
+
+                main_world.functions[subfunc_name] = Function(subfunc_name, subfunc_lines)
+            else:
+                self.commands.append(self.create_command_object(line))
+
+            i += 1
+
 
     def create_command_object(self,line):
         from command import Command
