@@ -1,3 +1,5 @@
+import re
+
 class Function():
     def __init__(self,relpath,lines):
         self.relpath = relpath
@@ -10,13 +12,15 @@ class Function():
         while i < len(lines):
             line = lines[i]
 
-            if line.startswith("def"):
+            if line.startswith("def"):  
                 subfunc_name = line[4:].strip()
                 subfunc_lines = []
 
                 j = i + 1
-                while j < len(lines) and (lines[j].startswith("\t") or lines[j].isspace()):
-                    subfunc_lines.append(lines[j][1:])
+                if j < len(lines):
+                    white_space = re.findall(r"^\s*", lines[j])[0]
+                while j < len(lines) and (lines[j].startswith(white_space) or lines[j].isspace()):
+                    subfunc_lines.append(lines[j][len(white_space):])
                     j += 1
                 i = j - 1
 
