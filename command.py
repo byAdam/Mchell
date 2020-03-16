@@ -359,11 +359,17 @@ class Command:
                 if len(t[i]) > 1 and t[i][:2] in ["@s","@p","@r","@a","@e"]:
                     is_character = False
                     objective = False
+                    is_compact = False
+
                     if "*" in t[i]:
                          target, objective = t[i].split("*")
                     elif "#" in t[i]:
                         target, objective = t[i].split("#")
                         is_character = True
+
+                        if objective[0] == "^":
+                            objective = objective[1:]
+                            is_compact = True
                     else:
                          target = t[i]
 
@@ -371,7 +377,11 @@ class Command:
                     if entities:
                         if objective:
                             if is_character:
-                                t[i] = ", ".join([chr(main_world.get_entity_score(u,objective)) for u in entities])
+                                join_string = ", "
+                                if is_compact:
+                                    join_string = ""
+
+                                t[i] = join_string.join([chr(main_world.get_entity_score(u,objective)) for u in entities])
                             else:
                                 t[i] = ", ".join([str(main_world.get_entity_score(u,objective)) for u in entities])
                         else:
