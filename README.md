@@ -44,6 +44,8 @@ Please report any bugs and issues you find [here](https://github.com/byAdam/MCF/
 - /tag
 - /scoreboard
 - /say
+- /debug
+- /exit
 
 ## Implemented Selectors
 - @a
@@ -78,6 +80,8 @@ say
   - E.G @a\*example
 - SELECTOR#OBJECTIVE = Returns the UNICODE Character corresponding to the score for the objective for the target entities
   - E.G @a#example
+  - Entering a ^ character after the # will combine the characters into a single string
+    - E.G @a#^example
 - $(x,y,z) = Returns block and data value at those coordinates in the form "block:data"
   - E.G $(0,~5,10)
 
