@@ -3,7 +3,7 @@ from cx_Freeze import setup, Executable
 bdist_msi_options = {
     'upgrade_code': '{5fa7309a-bb70-42bb-bb83-6b1ee24f5026}',
     'add_to_path': True,
-    'initial_target_dir': r'[ProgramFilesFolder]\%s' % ("mcf")
+    'initial_target_dir': r'[ProgramFilesFolder]\%s' % ("mchell")
     }
 
 build_exe_options = {
@@ -12,13 +12,13 @@ build_exe_options = {
     }
 
 target = Executable(
-    script="mcf.py",
+    script="mchell.py",
     icon="icon.ico"
     )
 
-setup(name = "MCF" ,
+setup(name = "Mchell" ,
       version = "1.0.0",
-      description = "A Minecraft Bedrock Function interpreter written in Python" ,
+      description = "A Bedrock mcfunction shell and interpreter" ,
       executables = [target],
       options={
           'bdist_msi': bdist_msi_options,
