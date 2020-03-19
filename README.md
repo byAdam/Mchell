@@ -1,5 +1,7 @@
 ![Logo](icon.png "Logo")
 ### A Bedrock mcfunction shell and interpreter
+![Shell](shell.gif "Shell")
+
 ***
 # FAQ
 ## What is Mchell?
@@ -25,6 +27,7 @@ At the moment, you can't make any system calls except reading from STDIN and wri
 ## Using Mchell
 When you install Mchell, it adds "mchell" as a system command (Windows).
 You can run a program on the interpreter by specifying the path of the main mcfunction as a command line argument. The directory of the mcfunction file will act as the root directory. If no path is specified, Mchell will enter the shell.
+The main mcfunction file is ran relative to an entity of type "player" and name "main" 
 
 There is a number of flags you can specify:
 - -h, --help: Output a list of valid arguments
