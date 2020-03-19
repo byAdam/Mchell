@@ -400,7 +400,10 @@ class Command:
 
         executer = "@"
         if executed_by:
-            executer = main_world.entities[executed_by]["name"]
+            try:
+                executer = main_world.entities[executed_by]["name"]
+            except:
+                pass
         evaluated_text = evaluate_text(self.parsed_arguments["text"])
 
         say_text = "[{}] {}\n".format(executer,evaluated_text)
