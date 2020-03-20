@@ -101,7 +101,7 @@ debug \<target> \[prefix]
 - The prefix will be at the start of the line before the data, by default, it is "DEBUG"
 - E.g debug @a HELLO
 
-def FUNC_NAME
+[def FUNC_NAME](#defining-function)
 - Defines a function within a mcfunction file
 - You do this by typing `def FUNC_NAME` followed by a number of indented lines
 - Note: When a mcfunction is called for the first time, any functions defined within it will overide functions with the same name
