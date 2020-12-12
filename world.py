@@ -205,6 +205,3 @@ class World:
         return sqrt(dist)
 
 main_world = World()
-
-if __name__ == "__main__":
-    print(main_world.calculare_coordinates((1,0,0),("~","~","")))
