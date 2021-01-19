@@ -8,7 +8,7 @@
 Mchell is a shell and interpreter for running Bedrock mcfunctions. It allows you to write, test and debug mcfunctions outside of Minecraft, as well as write real programs to run on the Windows command line.
 
 ## What use does Mchell have?
-Primarily, Mchell is an (esoteric programming languages)[https://en.wikipedia.org/wiki/Esoteric_programming_language]. It's primary goal is to challenge developers, and to make mcfunction into a useable (code golf)[] language. However, it is not without practical use. Mchell gives developers a simple work enviroment to debug and test their code, before importing it into Minecraft.
+Primarily, Mchell is an [esoteric programming languages](https://en.wikipedia.org/wiki/Esoteric_programming_language). It's primary goal is to challenge developers, and to make mcfunction into a useable [code golf](https://en.wikipedia.org/wiki/Code_golf) language. However, it is not without practical use. Mchell gives developers a simple work enviroment to debug and test their code, before importing it into Minecraft.
 
 ## How does Mchell work?
 When you run a Mchell program, a 'virtual' Minecraft world is created. Your program then interface with this Minecraft world as if it were a real one. This creates a seamless transition between developing for Mchell and for Minecraft.
