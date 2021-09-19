@@ -42,18 +42,22 @@ Please report any bugs and issues you find [here](https://github.com/byAdam/Mche
 # Technical Details
 
 ## Implemented Commands
-- /setblock
-- /fill
-- /summon 
-- /kill
-- /tp
-- /execute
-- /function
-- /tag
-- /scoreboard
-- /say
-- /debug
-- /exit
+ - /camera
+ - /debug
+ - /execute
+ - /exit
+ - /quit
+ - /fill
+ - /function
+ - /help
+ - /kill
+ - /say
+ - /scoreboard
+ - /setblock
+ - /summon
+ - /tag
+ - /teleport
+ - /tp
 
 ## Implemented Selectors
 - @a
@@ -73,35 +77,19 @@ Please report any bugs and issues you find [here](https://github.com/byAdam/Mche
  - c
 
 ## Custom Syntax
-scoreboard players input \<target> \<objective>
-- Reads a line from STDIN
-- The input will be saved as a score to the targets for that objective
-- If the line is an integer, the input will the integer
-- If the line consists of a single UNICODE character, the input will be the UNICODE code of the character
-- If the line is blank, the input will be 0
-- If the line consists of more than one UNICODE character, an error will be raised
-- E.G scoreboard players input @a example
 
-say
-- Writes a line to STDOUT
-- SELECTOR\*OBJECTIVE = Returns the score for the objective for the target entities
-  - E.G @a\*example
-- SELECTOR#OBJECTIVE = Returns the UNICODE Character corresponding to the score for the objective for the target entities
-  - E.G @a#example
-  - Entering a ^ character after the # will combine the characters into a single string
-    - E.G @a#^example
-- $(x,y,z) = Returns block and data value at those coordinates in the form "block:data"
-  - E.G $(0,~5,10)
+### camera
+Usage:
+- camera position <position: x y z>
+- camera dimensions <dimensions: x y z>
+- camera <start|stop>
 
-exit
-- Exits the program
+Description: FINISH THIS
 
-debug \<target> \[prefix]
-- Outputs the entity data for all targeted entities
-- The prefix will be at the start of the line before the data, by default, it is "DEBUG"
-- E.g debug @a HELLO
+### exit / quit
+Description: exits the program
 
-[def FUNC_NAME](#defining-function)
+### [def FUNC_NAME](#defining-function)
 - Defines a function within a mcfunction file
 - You do this by typing `def FUNC_NAME` followed by a number of indented lines
 - Note: When a mcfunction is called for the first time, any functions defined within it will overide functions with the same name
@@ -114,13 +102,3 @@ def loop
 say Before Loop
 function loop
 ```
-
-## Structure
-### World
-Consist of: blocks, entities, scoreboard objectives
-### Entity
-Consist of: position, uuid, type, name, tags
-### Block
-Consists of: a position, identifier, data value
-### Scoreboard Objective
-Consits of: entities with a non-null score
