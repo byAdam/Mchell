@@ -1,3 +1,9 @@
+**❗ Discontinued ❗**
+
+See [ShulkerBash](https://github.com/byAdam/ShulkerBash) for the successor to Mchell
+
+---
+
 ![Logo](icon.png "Logo")
 ### A Bedrock mcfunction shell and interpreter
 ![Shell](shell.gif "Shell")
